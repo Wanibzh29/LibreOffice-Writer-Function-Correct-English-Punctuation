@@ -1,4 +1,4 @@
-# LibreOffice-Writer-Function-Correct-English-Punctuation
+# LibreOffice Writer Function Correct english punctuation
 A little function to automatically correct the punctuation of a text using the english punctuation's rules.
 
 ## I. Licences
