@@ -1,0 +1,53 @@
+Sub CorrectEnglishPunctuation
+    Dim oDoc As Object
+    Dim oReplace As Object
+    oDoc = ThisComponent
+    oReplace = oDoc.createReplaceDescriptor()
+    oReplace.SearchRegularExpression = True
+
+    ' 1. Supprimer espace avant : ; ? ! . ,
+    oReplace.SearchString = " +([:;?!.,])"
+    oReplace.ReplaceString = "$1"
+    oDoc.replaceAll(oReplace)
+
+    ' 2. Ajouter espace après : ; ? ! . , s'il n'y en a pas
+    oReplace.SearchString = "([:;?!.,])(?=\S)"
+    oReplace.ReplaceString = "$1 "
+    oDoc.replaceAll(oReplace)
+
+    ' 3. Pas d’espace après ( ou avant )
+    oReplace.SearchString = "([\(]) +"
+    oReplace.ReplaceString = "$1"
+    oDoc.replaceAll(oReplace)
+
+    oReplace.SearchString = " +([\)])"
+    oReplace.ReplaceString = "$1"
+    oDoc.replaceAll(oReplace)
+
+    ' 4. Guillemets droits -> guillemets anglais “ ”
+    oReplace.SearchString = """(.*?)"""
+    oReplace.ReplaceString = "“$1”"
+    oDoc.replaceAll(oReplace)
+
+    ' 5. Doubles espaces
+    oReplace.SearchString = " {2,}"
+    oReplace.ReplaceString = " "
+    oDoc.replaceAll(oReplace)
+
+    ' 6. Points de suspension (...) → caractère unique …
+    oReplace.SearchString = "\.\.\."
+    oReplace.ReplaceString = "…"
+    oDoc.replaceAll(oReplace)
+
+    ' 7. Espace après les points de suspension si suivis d’une majuscule
+    oReplace.SearchString = "…([A-Z])"
+    oReplace.ReplaceString = "… $1"
+    oDoc.replaceAll(oReplace)
+
+    ' 8. Suppression espaces en début/fin de paragraphe
+    oReplace.SearchString = "^\s+|\s+$"
+    oReplace.ReplaceString = ""
+    oDoc.replaceAll(oReplace)
+
+    MsgBox "Correction complète de la ponctuation terminée selon les règles de ponctuation anglaise!", 64, "Macro terminée"
+End Sub
